@@ -1,0 +1,3 @@
+- id: hello
+  execute-command: "/config/run/hello-world.sh"
+  response-message: "Hello World"
