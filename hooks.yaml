@@ -1,3 +1,12 @@
 - id: hello
   execute-command: "/config/run/hello-world.sh"
   response-message: "Hello World"
+
+- id: motion
+  execute-command: "/config/run/motion.sh"
+  http-methods:
+    - GET
+  pass-environment-to-command:
+    - source: query
+      name: id
+      envname: DEVICE_ID
