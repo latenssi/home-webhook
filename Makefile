@@ -10,4 +10,4 @@ run:
 
 .PHONY: shell
 shell:
-	@docker run --env-file .env --rm -it -p 9000:9000 --name $(IMAGE_NAME) --entrypoint sh $(IMAGE_NAME) -
+	@docker run --env-file .env.test --rm -it -p 9000:9000 --name $(IMAGE_NAME) --entrypoint sh $(IMAGE_NAME) -
