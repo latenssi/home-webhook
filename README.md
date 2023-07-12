@@ -6,7 +6,13 @@ Hooks are defined in [./hooks.yaml](./hooks.yaml)
 
 Scripts are defined in [./run/](./run/)
 
+## `hello`
+
+Just a hello world.
+
 ## `shelly-report`
+
+Takes in a sensor report from a Shelly gen 1 device and uploads the data to InfluxDB.
 
 **Required env vars**
 
