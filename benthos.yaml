@@ -1,0 +1,22 @@
+input:
+  http_server:
+    path: /hooks/shelly-report
+    allowed_verbs:
+      - GET
+
+pipeline:
+  processors:
+    - log:
+        level: INFO
+        message: 'Received report from sensor ${! meta("ID")}'
+    - mutation: |
+        root = "shellyReport,sensor_id=" + @ID | "" + " battery=" + @bat | "" + ",lux=" + @lux | "" + ",motion=" + @motion | "" + ",tamper=" + @tamper | "" + ",temperature=" + @temp | "" + " " + timestamp_unix().string()
+
+output:
+  http_client:
+    url: "${INFLUX_HOST}/api/v2/write?bucket=${INFLUX_BUCKET}&precision=s"
+    verb: POST
+    headers:
+      Authorization: Token ${INFLUX_TOKEN}
+      Content-Type: text/plain; charset=utf-8
+      Accept: application/json
