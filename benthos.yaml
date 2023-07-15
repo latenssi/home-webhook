@@ -5,6 +5,10 @@ input:
     allowed_verbs:
       - GET
 
+# Use buffer as sensors don't really care about acks from us
+buffer:
+  memory: {}
+
 pipeline:
   processors:
     - log:
