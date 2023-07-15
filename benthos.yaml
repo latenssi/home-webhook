@@ -36,10 +36,10 @@ output:
             Accept: application/json
         processors:
           - mutation: |
-              root.sensor_id = @ID
-              root.battery = @bat
-              root.lux = @lux
-              root.motion = @motion
-              root.tamper = @tamper
-              root.temperature = @temp
-              root.timestamp = timestamp_unix().string()
+              root.sensor_id = @ID | null
+              root.battery = @bat.number() | null
+              root.lux = @lux.number() | null
+              root.motion = @motion.bool() | null
+              root.tamper = @tamper.bool() | null
+              root.temperature = @temp.number() | null
+              root.timestamp = timestamp_unix()
