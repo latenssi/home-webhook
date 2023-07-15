@@ -1,4 +1,5 @@
 input:
+  label: "shellyreport_webhook"
   http_server:
     path: /hooks/shelly-report
     allowed_verbs:
@@ -9,14 +10,36 @@ pipeline:
     - log:
         level: INFO
         message: 'Received report from sensor ${! meta("ID")}'
-    - mutation: |
-        root = "shellyReport,sensor_id=" + @ID | "" + " battery=" + @bat | "" + ",lux=" + @lux | "" + ",motion=" + @motion | "" + ",tamper=" + @tamper | "" + ",temperature=" + @temp | "" + " " + timestamp_unix().string()
 
 output:
-  http_client:
-    url: "${INFLUX_HOST}/api/v2/write?bucket=${INFLUX_BUCKET}&precision=s"
-    verb: POST
-    headers:
-      Authorization: Token ${INFLUX_TOKEN}
-      Content-Type: text/plain; charset=utf-8
-      Accept: application/json
+  broker:
+    pattern: fan_out
+    outputs:
+      - label: "shellyreport_influxdb"
+        http_client:
+          url: "${INFLUX_HOST}/api/v2/write?bucket=${INFLUX_BUCKET}&precision=s"
+          verb: POST
+          headers:
+            Authorization: Token ${INFLUX_TOKEN}
+            Content-Type: text/plain; charset=utf-8
+            Accept: application/json
+        processors:
+          - mutation: |
+              root = "shellyReport,sensor_id=" + @ID | "" + " battery=" + @bat | "" + ",lux=" + @lux | "" + ",motion=" + @motion | "" + ",tamper=" + @tamper | "" + ",temperature=" + @temp | "" + " " + timestamp_unix().string()
+
+      - label: "shellyreport_huginn"
+        http_client:
+          url: "${HUGINN_SHELLYREPORT_URL}"
+          verb: POST
+          headers:
+            Content-Type: application/json; charset=utf-8
+            Accept: application/json
+        processors:
+          - mutation: |
+              root.sensor_id = @ID
+              root.battery = @bat
+              root.lux = @lux
+              root.motion = @motion
+              root.tamper = @tamper
+              root.temperature = @temp
+              root.timestamp = timestamp_unix().string()

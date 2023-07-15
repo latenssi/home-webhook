@@ -7,3 +7,4 @@ Relies heavily on https://www.benthos.dev
 - `INFLUX_HOST`
 - `INFLUX_TOKEN`
 - `INFLUX_BUCKET`
+- `HUGINN_SHELLYREPORT_URL`
