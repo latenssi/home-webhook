@@ -1,13 +1,3 @@
-IMAGE_NAME = "home-webhook"
-
-.PHONY: build
-build:
-	@docker build -t $(IMAGE_NAME) .
-
-.PHONY: run
-run:
-	@docker run --env-file .env.test --rm -it -p 9000:9000 --name $(IMAGE_NAME) $(IMAGE_NAME) -hooks=/config/hooks.yaml -verbose
-
-.PHONY: shell
-shell:
-	@docker run --env-file .env.test --rm -it -p 9000:9000 --name $(IMAGE_NAME) --entrypoint sh $(IMAGE_NAME) -
+.PHONY: benthos
+benthos:
+	@docker run --env-file .env.benthos --rm -it -p 4195:4195 -v $(PWD)/benthos.yaml:/benthos.yaml jeffail/benthos
