@@ -1,6 +1,6 @@
 input:
   http_server:
-    path: /shelly-report
+    path: /hooks/shelly-report
     allowed_verbs:
       - GET
 
