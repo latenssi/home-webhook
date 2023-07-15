@@ -1,6 +1,5 @@
 input:
   http_server:
-    address: ""
     path: /shelly-report
     allowed_verbs:
       - GET
